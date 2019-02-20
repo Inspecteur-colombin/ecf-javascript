@@ -41,6 +41,65 @@ function getpromotions() {
         })
 }
 
+//function create promotion
+var createpromo = document.querySelector("#create-new-promotion");
+createpromo.addEventListener('submit', createPromotion);
+
+function createPromotion(event) {
+    event.preventDefault(event);//preventDefault() method cancels the event if it is cancelable, meaning that the default action that belongs to the event will not occur.
+    const nameInput = document.querySelector("#new-promotion-name");
+    const startInput = document.querySelector("#new-promotion-startdate") //declares the id of the DOM
+    const endInput = document.querySelector("#new-promotion-endDate") // recover the value of the Input in the HTML
+    console.log(nameInput.value);
+
+    fetch(URL + '/promotions', { // fecth get list-promotions
+            method: 'POST', // add promotion in the API
+            headers: new Headers({
+                'content-type': 'application/json'
+            }),
+            body: JSON.stringify({ // converts a JavaScript value to a JSON string
+
+                name: nameInput.value,
+                startDate: startInput.value,
+                endDate: endInput.value,
+                students: []
+
+            })
+        })
+
+        .then(response => response.json())
+        .then(promo => {
+
+        getpromotions(); // callback function to refresh
+        }) 
+        .catch(error => console.log(error));
+}
+
+
+var modif = document.querySelector("#newpromname"); //declares the id of the DOM
+modif.addEventListener("submit", modifier);
+
+function modifier(event){ //create function modify promotions
+    event.preventDefault(event);
+    fetch(URL + '/promotions/' + selectPromo.value , {
+        method: 'PUT', // modify promotion select in the API
+        headers: new Headers({
+            'content-type': 'application/json'
+        }),
+        body: JSON.stringify({ // converts a JavaScript value to a JSON string
+            name: newnamepromo.value,
+        })
+    })
+
+    .then(response => response.json())
+    .then(promo => {
+
+        getpromotions(); // callback function to refresh
+    })
+    .catch(error => console.log(error));
+}
+
+
 
 
 
